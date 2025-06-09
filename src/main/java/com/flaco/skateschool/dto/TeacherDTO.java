@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class TeacherDTO extends UserDTO {
+public class TeacherDTO extends UserDTO { // Base class UserDTO
     @NotBlank @Size(max = 100)
     private String specialty;
 

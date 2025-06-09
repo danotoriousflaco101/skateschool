@@ -11,10 +11,11 @@ import java.util.List;
 @Getter
 @Setter
 public class Student extends User {
-    @Enumerated(EnumType.STRING)
+
+    @Enumerated(EnumType.STRING) // Student's Skate style like STREET, VERT, FREESTYLE..
     private SkateStyle skateStyle;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING) // Skill level of the student
     private SkillLevel skillLevel;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)

@@ -18,32 +18,34 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     private JwtUtils jwtUtils;
 
     @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private UserDetailsServiceImpl userDetailsService; // Loads user details from DB
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         try {
-            String jwt = parseJwt(request);
+            String jwt = parseJwt(request); // Extract JWT token from request
+            // Validate the token
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-                String username = jwtUtils.getUsernameFromJwtToken(jwt);
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                String username = jwtUtils.getUsernameFromJwtToken(jwt);// Get username from token
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username); // Load user details
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                        userDetails, null, userDetails.getAuthorities()); // Create authentication object
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request)); // Add request details
+                SecurityContextHolder.getContext().setAuthentication(authentication); // Set authentication
             }
         } catch (Exception e) {
-            logger.error("Brader i cannot set user authentication: {}", e);
+            logger.error("Brader i cannot set user authentication: {}", e); // Log error if auth fails
         }
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(request, response); // Continue with the next filter
     }
 
     private String parseJwt(HttpServletRequest request) {
-        String headerAuth = request.getHeader("Authorization");
+        String headerAuth = request.getHeader("Authorization"); // Get Authorization header
         if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-            return headerAuth.substring(7);
+            return headerAuth.substring(7); // Strip "Bearer " prefix and return token
         }
-        return null;
+        return null; // No token found
     }
 }

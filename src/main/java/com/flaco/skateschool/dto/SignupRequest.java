@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SignupRequest {
+public class SignupRequest { // Class for signup request DTO
     @NotBlank @Size(min = 3, max = 50)
     private String username;
 

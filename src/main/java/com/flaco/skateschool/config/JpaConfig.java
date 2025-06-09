@@ -11,3 +11,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class JpaConfig {
 }
+
+// This configuration class sets up JPA repositories,
+// enables auditing for JPA entities
+// and activates transaction management for this application.

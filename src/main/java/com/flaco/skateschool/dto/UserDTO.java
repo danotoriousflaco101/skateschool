@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class UserDTO {
+public class UserDTO { // Base class for user DTOs
     private Long id;
 
     @NotBlank @Size(min = 3, max = 50)

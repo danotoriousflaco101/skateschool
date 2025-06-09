@@ -21,6 +21,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    // Create a new student account
     @Transactional
     public void registerUser(SignupRequest request) {
         logger.info("Attempting to register user: {}", request.getUsername());
@@ -34,7 +35,7 @@ public class AuthService {
             throw new UserAlreadyExistsException("Email '" + request.getEmail() + "' is already registered");
         }
 
-        User user;
+        User user; // Create user based on role
         try {
             Role role = Role.valueOf(request.getRole().toUpperCase());
 
@@ -58,7 +59,7 @@ public class AuthService {
             throw new BadRequestException("Invalid role or skill level provided");
         }
     }
-
+    // Validate signup request fields and throw appropriate exceptions if invalid
     private void validateRequest(SignupRequest request) {
         if (request.getUsername() == null || request.getEmail() == null ||
                 request.getPassword() == null || request.getRole() == null) {
@@ -66,6 +67,7 @@ public class AuthService {
         }
     }
 
+    // Create a new student account (with skate style)
     private Student createStudent(SignupRequest request) {
         Student student = new Student();
         if (request.getSkillLevel() != null) {
@@ -79,6 +81,7 @@ public class AuthService {
         return student;
     }
 
+    // Create a new teacher account (with years of experience)
     private Teacher createTeacher(SignupRequest request) {
         Teacher teacher = new Teacher();
         if (request.getYearsExperience() == null || request.getYearsExperience() < 0) {

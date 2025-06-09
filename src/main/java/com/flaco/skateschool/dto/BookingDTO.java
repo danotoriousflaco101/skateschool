@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class BookingDTO {
+public class BookingDTO { // Define the BookingDTO class with necessary fields
     private Long id;
 
     @NotNull

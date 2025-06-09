@@ -9,7 +9,8 @@ import java.util.List;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
-    List<Student> findBySkateStyle(SkateStyle skateStyle);
-    List<Student> findBySkillLevel(SkillLevel skillLevel);
-    List<Student> findBySkateStyleAndSkillLevel(SkateStyle skateStyle, SkillLevel skillLevel);
+
+    List<Student> findBySkateStyle(SkateStyle skateStyle); // Fetch students by skate style
+
+    List<Student> findBySkillLevel(SkillLevel skillLevel); // Fetch students by skill level
 }

@@ -7,13 +7,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
-    List<Booking> findByStudentId(Long studentId);
-    List<Booking> findByLessonId(Long lessonId);
 
+    List<Booking> findByStudentId(Long studentId); // Find all bookings for a specific student
+    List<Booking> findByLessonId(Long lessonId); // Find all bookings for a specific lesson
+
+    // Checks if a booking exists for a given student and lesson
     boolean existsByStudentAndLesson(Student student, Lesson lesson);
-    Optional<Booking> findByStudentAndLesson(Student student, Lesson lesson);
 }

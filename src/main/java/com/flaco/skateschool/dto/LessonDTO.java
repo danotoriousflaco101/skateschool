@@ -13,7 +13,7 @@ public class LessonDTO {
     @NotBlank @Size(max = 100)
     private String title;
 
-    private String description;
+    private String description; // Description of the lesson
 
     @NotNull @Future
     private LocalDateTime startTime;

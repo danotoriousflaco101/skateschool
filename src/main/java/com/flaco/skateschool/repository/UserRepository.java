@@ -17,14 +17,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Page<User> findAllByActiveTrue(Pageable pageable);
 
-    // Nuovi metodi aggiunti
-    @Query("SELECT u FROM User u WHERE u.email = ?1 AND u.active = true")
-    Optional<User> findByEmailAndActiveTrue(String email);
-
     @Modifying
     @Query("UPDATE User u SET u.active = ?2 WHERE u.id = ?1")
-    int updateUserActiveStatus(Long id, boolean active);
+    void updateUserActiveStatus(Long id, boolean active);
 
-    @Query("SELECT u FROM User u WHERE u.username LIKE %?1% OR u.email LIKE %?1%")
-    Page<User> searchUsers(String keyword, Pageable pageable);
 }

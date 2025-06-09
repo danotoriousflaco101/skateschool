@@ -7,15 +7,18 @@ import com.flaco.skateschool.model.Teacher;
 import com.flaco.skateschool.model.User;
 import org.mapstruct.*;
 
+// Configure MapStruct mapper
 @Mapper(componentModel = "spring",
         uses = {StudentMapper.class, TeacherMapper.class},
         unmappedTargetPolicy = ReportingPolicy.IGNORE,
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface UserMapper {
 
+    // Convert User entity to UserDTO
     @Mapping(target = "role", expression = "java(user.getRole() != null ? user.getRole().name() : null)")
     UserDTO toDto(User user);
 
+    // Convert UserDTO to User entity
     default User toEntity(UserDTO dto) {
         if (dto == null || dto.getRole() == null) {
             throw new IllegalArgumentException("UserDTO and role cannot be null");
@@ -46,9 +49,11 @@ public interface UserMapper {
         return user;
     }
 
+    // Update User entity from UserDTO, ignoring role
     @Mapping(target = "role", ignore = true)
     void updateUserFromDto(UserDTO userDTO, @MappingTarget User user);
 
+    // Update user role after mapping
     @AfterMapping
     default void updateUserRole(UserDTO userDTO, @MappingTarget User user) {
         if (userDTO.getRole() != null) {
@@ -59,15 +64,5 @@ public interface UserMapper {
                 throw new IllegalArgumentException("Invalid role value: " + userDTO.getRole());
             }
         }
-    }
-
-    default void copyUserFields(User source, User target) {
-        target.setId(source.getId());
-        target.setUsername(source.getUsername());
-        target.setEmail(source.getEmail());
-        target.setPassword(source.getPassword());
-        target.setRole(source.getRole());
-        target.setActive(source.isActive());
-        // Add any other fields that need to be copied
     }
 }

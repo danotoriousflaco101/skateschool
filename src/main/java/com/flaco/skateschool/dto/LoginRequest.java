@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class LoginRequest {
+public class LoginRequest { // DTO for login request
     @NotBlank @Size(min = 3, max = 50)
     private String username;
 

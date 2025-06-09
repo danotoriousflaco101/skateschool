@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserStatusDTO {
+public class UserStatusDTO { // DTO for user status
     private Long userId;
     private boolean active;
 }

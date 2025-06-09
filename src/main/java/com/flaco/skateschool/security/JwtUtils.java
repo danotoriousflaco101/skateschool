@@ -13,23 +13,22 @@ import java.util.Date;
 @Component
 public class JwtUtils {
     @Value("${app.jwt.secret}")
-    private String jwtSecret;
+    private String jwtSecret; // Secret key for signing JWT
 
     @Value("${app.jwt.expiration-ms}")
-    private int jwtExpirationMs;
+    private int jwtExpirationMs; // Token expiration time in ms
 
+    // Generate JWT token from authentication object
     public String generateJwtToken(Authentication authentication) {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
-        return Jwts.builder()
-                .setSubject(userPrincipal.getUsername())
-                .claim("roles", userPrincipal.getAuthorities())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+        return Jwts.builder().subject(userPrincipal.getUsername()) // Set username as subject
+                .claim("roles", userPrincipal.getAuthorities()).issuedAt(new Date()).expiration(new Date(System.currentTimeMillis() + jwtExpirationMs)) // Token expiry
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256) // Sign with secret key
                 .compact();
     }
 
+    // Validate JWT token signature and expiry
     public boolean validateJwtToken(String authToken) {
         try {
             Jwts.parser().setSigningKey(getSigningKey()).build().parseClaimsJws(authToken);
@@ -48,15 +47,15 @@ public class JwtUtils {
         return false;
     }
 
+    // Extract username (subject) from JWT token
     public String getUsernameFromJwtToken(String token) {
         return Jwts.parser()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+                .setSigningKey(getSigningKey()) // Set secret key for parsing
+                .build().parseSignedClaims(token).getPayload()
+                .getSubject(); // Get subject (username)
     }
 
+    // Get secret key for signing/parsing tokens
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(jwtSecret.getBytes());
     }

@@ -20,6 +20,7 @@ public class LessonService {
     private final TeacherRepository teacherRepository;
     private final LessonMapper lessonMapper;
 
+    // Get all lessons
     public List<LessonDTO> findAll() {
         return lessonRepository.findAll()
                 .stream()
@@ -27,14 +28,16 @@ public class LessonService {
                 .toList();
     }
 
+    // Get a lesson by id
     public LessonDTO findById(Long id) {
         Lesson lesson = lessonRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Lesson not found with id: " + id));
         return lessonMapper.toDto(lesson);
     }
 
+    // Save a new lesson
     @Transactional
-    public LessonDTO save(LessonDTO lessonDTO) {
+    public LessonDTO save(LessonDTO lessonDTO) { // Save a new lesson
         validateLesson(lessonDTO);
         Teacher teacher = getTeacher(lessonDTO.getTeacherId());
         Lesson lesson = lessonMapper.toEntity(lessonDTO);
@@ -43,6 +46,7 @@ public class LessonService {
         return lessonMapper.toDto(savedLesson);
     }
 
+    // Update an existing lesson
     @Transactional
     public LessonDTO update(Long id, LessonDTO lessonDTO) {
         Lesson existingLesson = lessonRepository.findById(id)
@@ -55,6 +59,7 @@ public class LessonService {
         return lessonMapper.toDto(updatedLesson);
     }
 
+    // Delete a lesson by id
     @Transactional
     public void delete(Long id) {
         if (!lessonRepository.existsById(id)) {
@@ -63,6 +68,7 @@ public class LessonService {
         lessonRepository.deleteById(id);
     }
 
+    // Get lessons by teacher id
     public List<LessonDTO> findByTeacherId(Long teacherId) {
         return lessonRepository.findByTeacherId(teacherId)
                 .stream()
@@ -70,6 +76,7 @@ public class LessonService {
                 .toList();
     }
 
+    // Validate lesson details
     private void validateLesson(LessonDTO lessonDTO) {
         if (lessonDTO.getStartTime().isBefore(LocalDateTime.now())) {
             throw new BadRequestException("Lesson start time must be in the future");
@@ -82,6 +89,7 @@ public class LessonService {
         }
     }
 
+    // Get teacher by id
     private Teacher getTeacher(Long teacherId) {
         return teacherRepository.findById(teacherId)
                 .orElseThrow(() -> new ResourceNotFoundException("Teacher not found with id: " + teacherId));

@@ -21,10 +21,10 @@ public class Lesson {
     private Long id;
 
     @Column(nullable = false, length = 100)
-    private String title;
+    private String title; // Title of the lesson
 
     @Column(length = 500)
-    private String description;
+    private String description; // Description of the lesson
 
     @Column(nullable = false)
     private LocalDateTime startTime;
@@ -34,14 +34,14 @@ public class Lesson {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private SkillLevel skillLevel;
+    private SkillLevel skillLevel; // Skill level of the lesson
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private SkateStyle skateStyle;
+    private SkateStyle skateStyle; // Type of lesson per skate style  (STREET, VERT, FREESTYLE...)
 
     @Column(nullable = false)
-    private Integer maxStudents;
+    private Integer maxStudents; // Maximum number of students allowed in the lesson
 
     @CreatedDate
     @Column(updatable = false)
@@ -57,6 +57,7 @@ public class Lesson {
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Booking> bookings;
 
+    // Method to check if the lesson is full or not.
     public boolean isFull() {
         return bookings != null && bookings.size() >= maxStudents;
     }

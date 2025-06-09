@@ -24,6 +24,7 @@ public class DataInitializer implements CommandLineRunner {
     private final BookingRepository bookingRepository;
     private final PasswordEncoder passwordEncoder;
 
+    // Constructor injection for dependencies
     public DataInitializer(UserRepository userRepository, StudentRepository studentRepository,
                            TeacherRepository teacherRepository, LessonRepository lessonRepository,
                            BookingRepository bookingRepository, PasswordEncoder passwordEncoder) {
@@ -40,13 +41,14 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) {
         logger.info("Starting data initialization...");
 
+        // Check if data already exists to prevent duplicate initialization
         if (userRepository.count() > 0) {
             logger.info("Data already initialized, skipping...");
             return;
         }
 
         try {
-            // Create admin user
+            // Create admin user for db population
             Teacher admin = new Teacher();
             admin.setUsername("admin");
             admin.setEmail("admin@example.com");
@@ -57,7 +59,7 @@ public class DataInitializer implements CommandLineRunner {
             userRepository.save(admin);
             logger.info("Admin user created successfully");
 
-            // Create students
+            // Create students for db population
             Student student1 = new Student();
             student1.setUsername("student1");
             student1.setEmail("student1@example.com");
@@ -68,7 +70,7 @@ public class DataInitializer implements CommandLineRunner {
             studentRepository.save(student1);
             logger.info("Student created successfully");
 
-            // Create teachers
+            // Create teachers for db population
             Teacher teacher1 = new Teacher();
             teacher1.setUsername("teacher1");
             teacher1.setEmail("teacher1@example.com");
@@ -79,7 +81,7 @@ public class DataInitializer implements CommandLineRunner {
             teacherRepository.save(teacher1);
             logger.info("Teacher created successfully");
 
-            // Create lessons
+            // Create lessons for db population
             Lesson lesson1 = new Lesson();
             lesson1.setTitle("Park Skating for Beginners");
             lesson1.setDescription("Learn the basics of park skating");
@@ -92,7 +94,7 @@ public class DataInitializer implements CommandLineRunner {
             lessonRepository.save(lesson1);
             logger.info("Lesson created successfully");
 
-            // Create bookings
+            // Create bookings for db population
             Booking booking1 = new Booking();
             booking1.setStudent(student1);
             booking1.setLesson(lesson1);

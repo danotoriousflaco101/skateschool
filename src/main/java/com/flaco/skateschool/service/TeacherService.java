@@ -16,6 +16,7 @@ public class TeacherService {
     private final TeacherRepository teacherRepository;
     private final TeacherMapper teacherMapper;
 
+    // Get all teachers
     public List<TeacherDTO> findAll() {
         return teacherRepository.findAll()
                 .stream()
@@ -23,12 +24,14 @@ public class TeacherService {
                 .toList();
     }
 
+    // Get teacher by ID
     public TeacherDTO getTeacherById(Long id) {
         Teacher teacher = teacherRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Teacher not found"));
         return teacherMapper.toDto(teacher);
     }
 
+    // Create a new teacher
     @Transactional
     public TeacherDTO createTeacher(TeacherDTO teacherDTO) {
         Teacher teacher = teacherMapper.toEntity(teacherDTO);
@@ -36,6 +39,7 @@ public class TeacherService {
         return teacherMapper.toDto(teacher);
     }
 
+    // Update an existing teacher
     @Transactional
     public TeacherDTO updateTeacher(Long id, TeacherDTO teacherDTO) {
         Teacher existingTeacher = teacherRepository.findById(id)
@@ -46,6 +50,7 @@ public class TeacherService {
         return teacherMapper.toDto(existingTeacher);
     }
 
+    // Delete a teacher by ID
     @Transactional
     public void deleteTeacher(Long id) {
         if (!teacherRepository.existsById(id)) {

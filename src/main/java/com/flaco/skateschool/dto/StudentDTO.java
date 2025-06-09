@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class StudentDTO extends UserDTO {
+public class StudentDTO extends UserDTO { // Base class for StudentDTO
     @NotNull
     private SkateStyle skateStyle;
 

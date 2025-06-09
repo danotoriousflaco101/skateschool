@@ -1,0 +1,39 @@
+@startuml
+
+class User {
+  -id: Long
+  -username: String
+  -email: String
+  -password: String
+}
+
+class Student {
+  -skillLevel: SkillLevel
+  -skateStyle: SkateStyle
+}
+
+class Teacher {
+  -specialty: String
+  -yearsExperience: Integer
+}
+
+class Lesson {
+  -id: Long
+  -title: String
+  -startTime: LocalDateTime
+  -endTime: LocalDateTime
+  -maxStudents: Integer
+}
+
+class Booking {
+  -id: Long
+  -status: BookingStatus
+}
+
+User <|-- Student
+User <|-- Teacher
+Lesson "1" -- "0..*" Booking
+Student "1" -- "0..*" Booking
+Teacher "1" -- "0..*" Lesson
+
+@enduml

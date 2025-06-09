@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 public class Teacher extends User {
     private String specialty; // STREET, VERT, FREESTYLE..
-    private Integer yearsExperience;
+    private Integer yearsExperience; // Years of teaching experience
 
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Lesson> lessons = new ArrayList<>();

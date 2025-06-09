@@ -18,6 +18,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
+    // Retrieve the currently authenticated user
     public UserDTO getCurrentUser() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByUsername(username)
@@ -25,16 +26,19 @@ public class UserService {
         return userMapper.toDto(user);
     }
 
+    // Retrieve a paginated list of all active users
     public Page<UserDTO> findAllActiveUsers(Pageable pageable) {
         return userRepository.findAllByActiveTrue(pageable).map(userMapper::toDto);
     }
 
+    // Find a user by their ID
     public UserDTO findUserById(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return userMapper.toDto(user);
     }
 
+    // Create a new user
     @Transactional
     public UserDTO createUser(UserDTO userDTO) {
         User user = userMapper.toEntity(userDTO);
@@ -42,6 +46,7 @@ public class UserService {
         return userMapper.toDto(user);
     }
 
+    // Update an existing user's information
     @Transactional
     public UserDTO updateUser(Long userId, UserDTO userDTO) {
         User existingUser = userRepository.findById(userId)
@@ -51,16 +56,19 @@ public class UserService {
         return userMapper.toDto(existingUser);
     }
 
+    // Activate a user account
     @Transactional
     public void activateUser(Long userId) {
         userRepository.updateUserActiveStatus(userId, true);
     }
 
+    // Deactivate a user account
     @Transactional
     public void deactivateUser(Long userId) {
         userRepository.updateUserActiveStatus(userId, false);
     }
 
+    // Delete a user account
     @Transactional
     public void deleteUser(Long userId) {
         userRepository.deleteById(userId);

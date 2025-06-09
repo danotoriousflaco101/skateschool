@@ -22,17 +22,22 @@ public class AuthController {
     private final JwtUtils jwtUtils;
     private final AuthService authService;
 
+    // Authenticate the user
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 
+        // Set authentication in security context
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
 
+        // Generate JWT token
+        String jwt = jwtUtils.generateJwtToken(authentication);
         return ResponseEntity.ok(new LoginResponse(jwt));
     }
 
+    // Register new user
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@Valid @RequestBody SignupRequest request) {
         authService.registerUser(request);

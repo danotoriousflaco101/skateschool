@@ -9,21 +9,22 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "users")
-@Inheritance(strategy = InheritanceType.JOINED)
+@Entity // Marks this class as a JPA entity
+@Table(name = "users") // Specifies the table name in the database
+@Inheritance(strategy = InheritanceType.JOINED) // Defines inheritance strategy for subclasses
 @Getter
 @Setter
-@EntityListeners(AuditingEntityListener.class)
+@EntityListeners(AuditingEntityListener.class) // Enables JPA auditing for this entity
+
 public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 50)
+    @Column(nullable = false, unique = true, length = 50) // Configures column constraints
     private String username;
 
-    @Column(nullable = false)
+    @Column(nullable = false) // Marks this column as non-nullable
     private String password;
 
     @Column(nullable = false, unique = true, length = 100)
@@ -33,12 +34,13 @@ public abstract class User {
     @Column(nullable = false)
     private Role role;
 
-    @CreatedDate
-    @Column(updatable = false)
+    @CreatedDate // Automatically sets the creation date
+    @Column(updatable = false) // Prevents this field from being updated after creation
     private LocalDateTime createdAt;
 
-    @LastModifiedDate
+    @LastModifiedDate // Automatically updates the last modified date
     private LocalDateTime updatedAt;
 
+    // Default value for the active status
     private boolean active = true;
 }

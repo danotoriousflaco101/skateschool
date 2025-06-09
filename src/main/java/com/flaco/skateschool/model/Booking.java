@@ -9,18 +9,20 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Booking {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    private Student student;
+    private Student student; // Student who made the booking
 
     @ManyToOne
-    private Lesson lesson;
+    private Lesson lesson; // The lesson being booked
 
-    private String notes;
+    private String notes; // Additional notes for the booking
 
     @Enumerated(EnumType.STRING)
-    private BookingStatus status = BookingStatus.PENDING; // Default value
+    private BookingStatus status = BookingStatus.PENDING; // Booking status, Default value is PENDING
+
 }

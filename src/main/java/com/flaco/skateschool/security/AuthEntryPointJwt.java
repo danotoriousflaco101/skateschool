@@ -12,13 +12,13 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
-        response.setContentType("application/json");
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json"); // Set response type
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // Set 401 status
         response.getWriter().write("""
             {
                 "error": "Unauthorized",
                 "message": "Brader authentication failed: Invalid or missing credentials"
             }
-            """);
+            """); // Return custom error message
     }
 }
