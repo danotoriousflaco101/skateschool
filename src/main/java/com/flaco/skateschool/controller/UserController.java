@@ -1,6 +1,7 @@
 package com.flaco.skateschool.controller;
 
 import com.flaco.skateschool.dto.UserDTO;
+import com.flaco.skateschool.model.User;
 import com.flaco.skateschool.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -92,5 +95,12 @@ public class UserController {
     @PreAuthorize("hasRole('TEACHER')")
     public ResponseEntity<String> teacherOnlyEndpoint() {
         return ResponseEntity.ok("This endpoint is accessible only to teachers!");
+    }
+
+    // Debugging endpoint to list all users (admin only)
+    @GetMapping("/debug/users")
+    public ResponseEntity<?> debugUsers() {
+        List<UserDTO> users = userService.findAllUsers();
+        return ResponseEntity.ok(users);
     }
 }

@@ -50,19 +50,24 @@ public class DataInitializer implements CommandLineRunner {
         try {
             // Create admin user for db population
             Teacher admin = new Teacher();
-            admin.setUsername("admin");
+            admin.setUsername("Adminator360");
             admin.setEmail("admin@example.com");
-            admin.setPassword(passwordEncoder.encode("adminpass"));
+            admin.setPassword(passwordEncoder.encode("Adminpass360"));
             admin.setRole(Role.ADMIN);
             admin.setSpecialty("Administration");
             admin.setYearsExperience(10);
-            userRepository.save(admin);
-            logger.info("Admin user created successfully");
+            Teacher savedAdmin = teacherRepository.save(admin);
+            logger.info("Admin user created successfully with ID: {}", savedAdmin.getId());
+
+            // Checks that user is saved
+            Teacher retrievedAdmin = teacherRepository.findById(savedAdmin.getId())
+                .orElseThrow(() -> new RuntimeException("Admin user not found after saving"));
+            logger.info("Retrieved admin user: {}", retrievedAdmin);
 
             // Create students for db population
             Student student1 = new Student();
-            student1.setUsername("student1");
-            student1.setEmail("student1@example.com");
+            student1.setUsername("tonytave");
+            student1.setEmail("tony@example.com");
             student1.setPassword(passwordEncoder.encode("studentpass"));
             student1.setRole(Role.STUDENT);
             student1.setSkateStyle(SkateStyle.PARK);
@@ -72,12 +77,12 @@ public class DataInitializer implements CommandLineRunner {
 
             // Create teachers for db population
             Teacher teacher1 = new Teacher();
-            teacher1.setUsername("teacher1");
-            teacher1.setEmail("teacher1@example.com");
+            teacher1.setUsername("StaceyPeralta");
+            teacher1.setEmail("Peralta@example.com");
             teacher1.setPassword(passwordEncoder.encode("teacherpass"));
             teacher1.setRole(Role.TEACHER);
             teacher1.setSpecialty("Street Skating");
-            teacher1.setYearsExperience(5);
+            teacher1.setYearsExperience(45);
             teacherRepository.save(teacher1);
             logger.info("Teacher created successfully");
 

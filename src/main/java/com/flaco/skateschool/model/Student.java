@@ -2,6 +2,7 @@ package com.flaco.skateschool.model;
 
 import com.flaco.skateschool.enums.SkateStyle;
 import com.flaco.skateschool.enums.SkillLevel;
+import com.flaco.skateschool.enums.Role;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,12 +13,18 @@ import java.util.List;
 @Setter
 public class Student extends User {
 
-    @Enumerated(EnumType.STRING) // Student's Skate style like STREET, VERT, FREESTYLE..
+    @Enumerated(EnumType.STRING)
     private SkateStyle skateStyle;
 
-    @Enumerated(EnumType.STRING) // Skill level of the student
+    @Enumerated(EnumType.STRING)
     private SkillLevel skillLevel;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<Booking> bookings;
+
+    // Costruttore che imposta il ruolo di default
+    public Student() {
+        super();
+        this.setRole(Role.STUDENT);
+    }
 }

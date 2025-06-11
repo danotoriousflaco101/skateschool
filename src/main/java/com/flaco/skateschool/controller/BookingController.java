@@ -35,14 +35,16 @@ public class BookingController {
     @PostMapping
     @PreAuthorize("hasRole('STUDENT')")
     public ResponseEntity<BookingDTO> createBooking(@Valid @RequestBody BookingDTO bookingDTO) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(bookingService.createBooking(bookingDTO));
+        BookingDTO createdBooking = bookingService.createBooking(bookingDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdBooking);
     }
 
     // Update an existing booking (only accessible to admin and/or teacher)
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     public ResponseEntity<BookingDTO> updateBooking(@PathVariable Long id, @Valid @RequestBody BookingDTO bookingDTO) {
-        return ResponseEntity.ok(bookingService.updateBooking(id, bookingDTO));
+        BookingDTO updatedBooking = bookingService.updateBooking(id, bookingDTO);
+        return ResponseEntity.ok(updatedBooking);
     }
 
     // Delete a booking (only accessible to admin and/or teacher)
@@ -57,20 +59,23 @@ public class BookingController {
     @PatchMapping("/{id}/confirm")
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     public ResponseEntity<BookingDTO> confirmBooking(@PathVariable Long id) {
-        return ResponseEntity.ok(bookingService.confirmBooking(id));
+        BookingDTO confirmedBooking = bookingService.confirmBooking(id);
+        return ResponseEntity.ok(confirmedBooking);
     }
 
     // Retrieve all bookings for a specific student (Accessible to admin, teacher, and student)
     @GetMapping("/student/{studentId}")
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER', 'STUDENT')")
     public ResponseEntity<List<BookingDTO>> getBookingsByStudent(@PathVariable Long studentId) {
-        return ResponseEntity.ok(bookingService.findByStudentId(studentId));
+        List<BookingDTO> bookings = bookingService.findByStudentId(studentId);
+        return ResponseEntity.ok(bookings);
     }
 
     // Retrieve all bookings for a specific lesson (accessible to admin and/or teacher)
     @GetMapping("/lesson/{lessonId}")
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     public ResponseEntity<List<BookingDTO>> getBookingsByLesson(@PathVariable Long lessonId) {
-        return ResponseEntity.ok(bookingService.findByLessonId(lessonId));
+        List<BookingDTO> bookings = bookingService.findByLessonId(lessonId);
+        return ResponseEntity.ok(bookings);
     }
 }

@@ -13,6 +13,7 @@ public class Teacher extends User {
     private String specialty; // STREET, VERT, FREESTYLE..
     private Integer yearsExperience; // Years of teaching experience
 
-    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Lesson> lessons = new ArrayList<>();
+    // One-to-many relationship with Lesson entity
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true) // Teacher has many lessons
+    private List<Lesson> lessons = new ArrayList<>(); // List of lessons taught by the teacher
 }

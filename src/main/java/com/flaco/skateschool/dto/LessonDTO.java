@@ -1,5 +1,7 @@
 package com.flaco.skateschool.dto;
 
+import com.flaco.skateschool.enums.SkateStyle;
+import com.flaco.skateschool.enums.SkillLevel;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,24 +12,26 @@ import java.time.LocalDateTime;
 public class LessonDTO {
     private Long id;
 
-    @NotBlank @Size(max = 100)
+    @Size(max = 100) // Maximum length of the lesson title
     private String title;
 
     private String description; // Description of the lesson
 
-    @NotNull @Future
-    private LocalDateTime startTime;
+    private LocalDateTime startTime; // Start time of the lesson
 
-    @NotNull
-    private LocalDateTime endTime;
+    private LocalDateTime endTime; // End time of the lesson
 
-    @NotNull @Min(1) @Max(20)
-    private Integer maxStudents;
+    @Min(1) @Max(20) // Maximum number of students allowed in the lesson
+    private Integer maxStudents; // Maximum number of students allowed in the lesson
 
-    @NotNull
-    private Long teacherId;
+    private Long teacherId; // ID of the teacher who teaches the lesson
 
-    private String teacherName;
+    private String teacherName; // Name of the teacher who teaches the lesson
+
+    private SkateStyle skateStyle; // Type of lesson per skate style (STREET, VERT, FREESTYLE...)
+
+    private SkillLevel skillLevel; // Skill level of the lesson
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

@@ -1,6 +1,7 @@
 package com.flaco.skateschool.exception;
 
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    // Handle ValidationException
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorDetails> handleValidationExceptions(MethodArgumentNotValidException ex, WebRequest request) {
         String errorMessage = ex.getBindingResult().getFieldErrors().stream()
@@ -30,6 +32,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
+    // Handle user already exists exception
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<ErrorDetails> handleUserAlreadyExists(UserAlreadyExistsException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(
@@ -42,6 +45,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
     }
 
+    // Handle resource not found exception
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorDetails> handleResourceNotFound(ResourceNotFoundException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(
@@ -54,6 +58,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
+    // Handle bad request exception
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorDetails> handleBadRequest(BadRequestException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(
@@ -66,6 +71,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
+    // Handle access denied exception
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorDetails> handleAccessDeniedException(AccessDeniedException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(
@@ -78,12 +84,26 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
     }
 
+    // Handle authentication failed exception
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorDetails> handleAuthenticationException(AuthenticationException ex, WebRequest request) {
+        ErrorDetails errorDetails = new ErrorDetails(
+                LocalDateTime.now(),
+                "Authentication failed",
+                ex.getMessage(),
+                "AUTHENTICATION_FAILED",
+                request.getDescription(false)
+        );
+        return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
+    }
+
+    // Handle global exception
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDetails> handleGlobalException(Exception ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(
                 LocalDateTime.now(),
-                "Internal server error: " + ex.getMessage(),
-                ex.getClass().getName(),
+                "Internal server error",
+                ex.getMessage(),
                 "INTERNAL_SERVER_ERROR",
                 request.getDescription(false)
         );

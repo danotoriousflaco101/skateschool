@@ -41,10 +41,10 @@ public class BookingService {
     // Create a new booking
     @Transactional
     public BookingDTO createBooking(BookingDTO bookingDTO) {
-        Lesson lesson = lessonRepository.findById(bookingDTO.getLessonId()) // Retrieve the lesson
+        Lesson lesson = lessonRepository.findById(bookingDTO.getLessonId())
                 .orElseThrow(() -> new ResourceNotFoundException("Lesson not found with id: " + bookingDTO.getLessonId()));
 
-        Student student = studentRepository.findById(bookingDTO.getStudentId()) // Retrieve the student
+        Student student = studentRepository.findById(bookingDTO.getStudentId())
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found with id: " + bookingDTO.getStudentId()));
 
         if (bookingRepository.existsByStudentAndLesson(student, lesson)) {
@@ -55,26 +55,28 @@ public class BookingService {
             throw new BadRequestException("Lesson is fully booked");
         }
 
-        Booking booking = new Booking(); // Create a new booking with the provided details
+        Booking booking = new Booking();
         booking.setLesson(lesson);
         booking.setStudent(student);
         booking.setStatus(BookingStatus.PENDING);
         booking.setNotes(bookingDTO.getNotes());
 
-        Booking savedBooking = bookingRepository.save(booking); // Save the booking and return it
+        Booking savedBooking = bookingRepository.save(booking);
         return bookingMapper.toDto(savedBooking);
     }
 
     // Update an existing booking
     @Transactional
     public BookingDTO updateBooking(Long id, BookingDTO bookingDTO) {
-        Booking booking = bookingRepository.findById(id) // Retrieve the booking
+        Booking booking = bookingRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found with id: " + id));
 
-        booking.setNotes(bookingDTO.getNotes()); // Update the booking notes
-        booking.setStatus(bookingDTO.getStatus()); // Update the booking status
+        booking.setNotes(bookingDTO.getNotes());
+        if (bookingDTO.getStatus() != null) {
+            booking.setStatus(bookingDTO.getStatus());
+        }
 
-        Booking updatedBooking = bookingRepository.save(booking); // Save the updated booking and return it
+        Booking updatedBooking = bookingRepository.save(booking);
         return bookingMapper.toDto(updatedBooking);
     }
 
@@ -84,7 +86,7 @@ public class BookingService {
         if (!bookingRepository.existsById(id)) {
             throw new ResourceNotFoundException("Booking not found with id: " + id);
         }
-        bookingRepository.deleteById(id); // Delete the booking
+        bookingRepository.deleteById(id);
     }
 
     // Confirm a pending booking
@@ -93,25 +95,25 @@ public class BookingService {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found with id: " + bookingId));
 
-        if (booking.getStatus() != BookingStatus.PENDING) { // Only confirm pending bookings
+        if (booking.getStatus() != BookingStatus.PENDING) {
             throw new BadRequestException("Only pending bookings can be confirmed");
         }
 
-        booking.setStatus(BookingStatus.CONFIRMED); // Confirm the booking
+        booking.setStatus(BookingStatus.CONFIRMED);
         Booking confirmedBooking = bookingRepository.save(booking);
         return bookingMapper.toDto(confirmedBooking);
     }
 
     // Get all bookings for a specific student
     public List<BookingDTO> findByStudentId(Long studentId) {
-        return bookingRepository.findByStudentId(studentId).stream() // Retrieve all bookings for the specific student
+        return bookingRepository.findByStudentId(studentId).stream()
                 .map(bookingMapper::toDto)
                 .collect(Collectors.toList());
     }
 
     // Get all bookings for a specific lesson
     public List<BookingDTO> findByLessonId(Long lessonId) {
-        return bookingRepository.findByLessonId(lessonId).stream() // Retrieve all bookings for the specific lesson
+        return bookingRepository.findByLessonId(lessonId).stream()
                 .map(bookingMapper::toDto)
                 .collect(Collectors.toList());
     }

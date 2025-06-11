@@ -20,54 +20,54 @@ import org.springframework.web.cors.CorsConfiguration;
 import java.util.List;
 
 @Configuration
-@EnableWebSecurity // Enables Spring Security
-@EnableMethodSecurity // Enables method-level security (e.g. @PreAuthorize)
+@EnableWebSecurity // Enable Spring Security
+@EnableMethodSecurity(prePostEnabled = true) // Enable method-level security
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final AuthEntryPointJwt unauthorizedHandler; // Handles unauthorized access
+    private final AuthEntryPointJwt unauthorizedHandler;
 
     @Bean
-    public AuthTokenFilter authenticationJwtTokenFilter() { // Filters incoming requests
-        return new AuthTokenFilter(); // Creates JWT filter
+    public AuthTokenFilter authenticationJwtTokenFilter() { // Add JWT token filter
+        return new AuthTokenFilter();
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception { // Configure security filter chain
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception { // Filter chain configuration
         http
                 .cors(cors -> cors.configurationSource(request -> {
-                    CorsConfiguration config = new CorsConfiguration(); // CORS config
-                    config.setAllowedOrigins(List.of("http://localhost:3000")); // Allow frontend
+                    CorsConfiguration config = new CorsConfiguration();
+                    config.setAllowedOrigins(List.of("http://localhost:3000"));
                     config.setAllowedMethods(List.of("*"));
                     config.setAllowedHeaders(List.of("*"));
                     config.setAllowCredentials(true);
                     return config;
                 }))
-                .csrf(AbstractHttpConfigurer::disable) // Disable CSRF (not needed for JWT)
+                .csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll() // Allow public auth endpoints
-                        .requestMatchers("/error").permitAll() // Allow error path
-                        .requestMatchers("/api/v1/users/me").authenticated() // Require auth for user info
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN") // Admin-only endpoints
-                        .requestMatchers("/api/teacher/**").hasAnyRole("TEACHER", "ADMIN") // Teacher & Admin access
-                        .anyRequest().authenticated() // All other endpoints require auth
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/error").permitAll()
+                        .requestMatchers("/api/v1/users/me").authenticated()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/teacher/**").hasAnyRole("TEACHER", "ADMIN")
+                        .anyRequest().authenticated()
                 );
 
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class); // Add JWT filter
+        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
+    // Create an authentication manager for Spring Security
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
-        // Auth manager bean
     }
 
+    // Create a password encoder for BCrypt hashing
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-        // Password encoder bean
     }
 }
 

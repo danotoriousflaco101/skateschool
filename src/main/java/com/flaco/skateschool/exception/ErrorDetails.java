@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDateTime;
 
+// DTO for error details
 @Getter
 @Setter
 @AllArgsConstructor

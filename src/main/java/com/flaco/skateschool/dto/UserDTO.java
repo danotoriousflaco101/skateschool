@@ -1,5 +1,6 @@
 package com.flaco.skateschool.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class UserDTO { // Base class for user DTOs
+public class UserDTO {
     private Long id;
 
     @NotBlank @Size(min = 3, max = 50)
@@ -16,8 +17,8 @@ public class UserDTO { // Base class for user DTOs
     @NotBlank @Email
     private String email;
 
-    @NotBlank
-    private String role; // "STUDENT" or "TEACHER"
+    @JsonIgnore
+    private String role;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
