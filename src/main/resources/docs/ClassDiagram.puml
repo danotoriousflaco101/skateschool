@@ -1,39 +1,87 @@
 @startuml
 
-class User {
-  -id: Long
-  -username: String
-  -email: String
-  -password: String
+skinparam packageStyle rectangle
+
+' ENUMS
+enum Role {
+             STUDENT,
+             TEACHER,
+             ADMIN
+         }
+
+enum BookingStatus {
+                       PENDING,
+                       CONFIRMED,
+                       CANCELLED,
+                       COMPLETED
+                   }
+
+enum SkillLevel {
+                    BEGINNER,
+                    INTERMEDIATE,
+                    ADVANCED,
+                    PRO
+                }
+
+enum SkateStyle {
+                    BOWL,
+                    PARK,
+                    STREET
+                }
+
+
+abstract class User {
+    +Long id
+    +String username
+    +String password
+    +String email
+    +Role role
+    +LocalDateTime createdAt
+    +LocalDateTime updatedAt
+    +boolean active
 }
 
 class Student {
-  -skillLevel: SkillLevel
-  -skateStyle: SkateStyle
+    +SkateStyle skateStyle
+    +SkillLevel skillLevel
+    +List<Booking> bookings
 }
 
 class Teacher {
-  -specialty: String
-  -yearsExperience: Integer
+    +String specialty
+    +Integer yearsExperience
+    +List<Lesson> lessons
 }
 
 class Lesson {
-  -id: Long
-  -title: String
-  -startTime: LocalDateTime
-  -endTime: LocalDateTime
-  -maxStudents: Integer
+    +Long id
+    +String title
+    +String description
+    +LocalDateTime startTime
+    +LocalDateTime endTime
+    +SkillLevel skillLevel
+    +SkateStyle skateStyle
+    +Integer maxStudents
+    +LocalDateTime createdAt
+    +LocalDateTime updatedAt
+    +boolean isFull()
 }
 
 class Booking {
-  -id: Long
-  -status: BookingStatus
+    +Long id
+    +String notes
+    +BookingStatus status
 }
 
+' Inheritance relations
 User <|-- Student
 User <|-- Teacher
-Lesson "1" -- "0..*" Booking
-Student "1" -- "0..*" Booking
-Teacher "1" -- "0..*" Lesson
+
+' Class relations
+Student "1" --> "0..*" Booking : effettua
+Booking "1" --> "1" Lesson : prenota
+Lesson "1" --> "0..*" Booking : contiene
+Lesson "1" --> "1" Teacher : è tenuta da
+Teacher "1" --> "0..*" Lesson : insegna
 
 @enduml

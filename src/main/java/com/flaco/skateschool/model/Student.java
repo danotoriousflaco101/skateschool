@@ -22,7 +22,7 @@ public class Student extends User {
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<Booking> bookings;
 
-    // Costruttore che imposta il ruolo di default
+    // Set default role to STUDENT when creating a new Student object.
     public Student() {
         super();
         this.setRole(Role.STUDENT);

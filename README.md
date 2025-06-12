@@ -8,9 +8,8 @@ The application offer CRUD functionality for all main entities and implements a 
 
 
 ## Class Diagram
-![SkateSchoolSchema.png](src/main/resources/docs/SkateSchoolSchema.png) - Detailled version created with dbdiagram.io
-![SkateSchoolFullDiagram.png](src/main/resources/docs/SkateSchoolFullDiagram.png) - Complete diagram created with draw.io
-
+![VisualClassDiagram.png](src/main/resources/docs/VisualClassDiagram.png)
+Find the same diagram in src/main/resources/docs/ClassDiagram.puml (PlantUML plugin needed for the visual render of the diagram)
 
 ## Configuration
 1. Clone the repository
@@ -52,12 +51,27 @@ Make sure to set these variables in your environment or use a `.env` file before
 - POST /api/auth/signup : Register a new user
 - POST /api/auth/signin : User login
 
+### UserController
+- GET /api/v1/users/me : Retrieve authenticated user's information
+- GET /api/v1/users : Retrieve all active users (admin only)
+- GET /api/v1/users/{userId} : Retrieve a user by their ID (admin only)
+- POST /api/v1/users : Create a new user (admin only)
+- PUT /api/v1/users/{userId} : Update an existing user's information (admin only)
+- PATCH /api/v1/users/{userId}/status : Update user's active status (admin only)
+- DELETE /api/v1/users/{userId} : Delete a user (admin only)
+- GET /api/v1/users/test : Verify access to protected resources
+- GET /api/v1/users/student-only : Test endpoint accessible only to users with STUDENT role
+- GET /api/v1/users/teacher-only : Test endpoint accessible only to users with TEACHER role
+- GET /api/v1/users/debug/users : Debugging endpoint to list all users (admin only)
+
 ### StudentController
 - GET /api/students : Retrieve all students
 - GET /api/students/{id} : Retrieve a specific student
 - POST /api/students : Create a new student
 - PUT /api/students/{id} : Update an existing student
 - DELETE /api/students/{id} : Delete a student
+- GET /by-style/{skateStyle} : Retrieve by Skate Style
+- GET /by-skill/{skillLevel} : Retrieve by Skill Level
 
 ### TeacherController
 - GET /api/teachers : Retrieve all teachers
@@ -65,6 +79,9 @@ Make sure to set these variables in your environment or use a `.env` file before
 - POST /api/teachers : Create a new teacher
 - PUT /api/teachers/{id} : Update an existing teacher
 - DELETE /api/teachers/{id} : Delete a teacher
+- GET /by-specialty : Retrieve by specialty
+- GET /sorted-by-experience : Sort by experience (in ages)
+- GET /lesson-counts : Retrieve teachers with most lessons
 
 ### LessonController
 - GET /api/lessons : Retrieve all lessons
@@ -72,6 +89,7 @@ Make sure to set these variables in your environment or use a `.env` file before
 - POST /api/lessons : Create a new lesson
 - PUT /api/lessons/{id} : Update an existing lesson
 - DELETE /api/lessons/{id} : Delete a lesson
+- GET /api/lessons/teacher/{teacherId} : Retrieve all lessons by teacher ID
 
 ### BookingController
 - GET /api/bookings : Retrieve all bookings
@@ -79,6 +97,9 @@ Make sure to set these variables in your environment or use a `.env` file before
 - POST /api/bookings : Create a new booking
 - PUT /api/bookings/{id} : Update an existing booking
 - DELETE /api/bookings/{id} : Delete a booking
+- PATCH /api/bookings/{id}/confirm : Confirm a booking
+- GET /api/bookings/student/{studentId} : Retrieve all bookings for a specific student
+- GET /api/bookings/lesson/{lessonId} : Retrieve all bookings for a specific lesson
 
 
 ## Database Configuration
