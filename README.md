@@ -112,3 +112,45 @@ The application uses JWT for authentication. Make sure to keep your JWT secret k
 
 ## Flyway Migration
 Flyway is configured in the application but is currently disabled. If you wish to enable it for database migrations, set `spring.flyway.enabled=true` in the `application.properties` file.
+
+## Additional material
+POSTMAN collection directory path:
+src/main/resources/docs/Skate School API.postman_collection.json
+If else: https://marcox-6864112.postman.co/workspace/Marco-X's-Workspace~b4e9325d-f072-4e7d-8bfc-cf0811bb9983/collection/43880328-06a68101-ac20-4849-b8b7-311d71d67924?action=share&creator=43880328
+Google Presentation - https://docs.google.com/presentation/d/1p41sY0S9TpZdUjRavgDJdGU-ZFhMpSibSdefptejHyI/edit?usp=sharing
+Trello - https://trello.com/invite/b/683428a753a59b2f9bc03921/ATTI32b8236f58766411daa45ce305187329DCE905B1/final-project
+
+## Future Development 
+- The front-end implementation, photo and video upload extension, comments and greater interest in the front-end part are all key.  The code is ready to be implemented. It will be based on the needs of the app itself and its use. It is essential that there is better control or a pre-set schedule by the administrator or teacher for private bookings or public lessons. Sending a confirmation email within the app with eventual options like:
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-mail</artifactId>
+</dependency>
+Adding links to bookings and lessons to access the Google Maps location and/or make a booking.
+
+Security:
+Implement rate limiting to prevent brute force attacks with options like:
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-cache</artifactId>
+</dependency>
+<dependency>
+    <groupId>com.github.vladimir-bukhtoyarov</groupId>
+    <artifactId>bucket4j-core</artifactId>
+    <version>7.6.0</version>
+</dependency>
+<dependency>
+    <groupId>com.github.vladimir-bukhtoyarov</groupId>
+    <artifactId>bucket4j-jcache</artifactId>
+    <version>7.6.0</version>
+</dependency>
+
+## Resources
+- google.com
+- w3schools.com
+- dev.to
+- github.com
+- spotify.com
+- youtube.com
